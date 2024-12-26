@@ -358,25 +358,51 @@ function getBalanceIndex(arr) {
  *        ]
  */
 function getSpiralMatrix(size) {
-  let matrix = [];
+  const arr = [];
 
   for (let i = 0; i < size; i += 1) {
-    let arr = [];
+    const inArr = [];
 
     for (let j = 0; j < size; j += 1) {
-      arr[j] = 0;
+      inArr[j] = 0;
     }
-    matrix.push(arr);
+
+    arr[i] = inArr;
   }
+
+  const directions = [
+    [0, 1],
+    [1, 0],
+    [0, -1],
+    [-1, 0],
+  ];
+
+  let currentDirection = 0;
+  let posX = 0;
+  let posY = 0;
 
   for (let i = 0; i < size * size; i += 1) {
-    matrix[0][i] = i + 1;
+    arr[posX][posY] = i + 1;
+
+    const nextPosX = posX + directions[currentDirection][0];
+    const nextPosY = posY + directions[currentDirection][1];
+
+    if (
+      nextPosX < 0 ||
+      nextPosX >= size ||
+      nextPosY < 0 ||
+      nextPosY >= size ||
+      arr[nextPosX][nextPosY] !== 0
+    ) {
+      currentDirection = (currentDirection + 1) % 4;
+    }
+
+    posX += directions[currentDirection][0];
+    posY += directions[currentDirection][1];
   }
 
-  console.log(matrix);
+  return arr;
 }
-
-getSpiralMatrix(3);
 
 /**
  * Rotates a matrix by 90 degrees clockwise in place.
@@ -393,9 +419,14 @@ getSpiralMatrix(3);
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
-}
+function rotateMatrix(matrix) {}
+
+const matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+console.log(rotateMatrix(matrix));
 
 /**
  * Sorts an array of numbers in ascending order in place.
