@@ -317,6 +317,8 @@ function isContainNumber(num, digit) {
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
 function getBalanceIndex(arr) {
+  if (arr.length === 0) return -1;
+
   let total = 0;
 
   for (let i = 0; i < arr.length; i += 1) {
@@ -419,14 +421,30 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(matrix) {}
+function rotateMatrix(matrix) {
+  const newMatr = matrix;
 
-const matrix = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9],
-];
-console.log(rotateMatrix(matrix));
+  for (let i = 0; i < Math.floor(newMatr.length / 2); i += 1) {
+    const first = i;
+    const last = newMatr.length - 1 - i;
+
+    for (let j = first; j < last; j += 1) {
+      const offset = j - first;
+
+      const top = newMatr[first][j];
+
+      newMatr[first][j] = newMatr[last - offset][first];
+
+      newMatr[last - offset][first] = newMatr[last][last - offset];
+
+      newMatr[last][last - offset] = newMatr[j][last];
+
+      newMatr[j][last] = top;
+    }
+  }
+
+  return newMatr;
+}
 
 /**
  * Sorts an array of numbers in ascending order in place.
@@ -442,8 +460,31 @@ console.log(rotateMatrix(matrix));
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+
+function partition(arr, start, end) {
+  const newArr = arr;
+  const pivot = newArr[end];
+  let i = start - 1;
+
+  for (let j = start; j < end; j += 1) {
+    if (newArr[j] < pivot) {
+      i += 1;
+      [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+  }
+
+  [newArr[i + 1], newArr[end]] = [newArr[end], newArr[i + 1]];
+  return i + 1;
+}
+
+function sortByAsc(arr, start = 0, end = arr.length - 1) {
+  if (start >= end) return arr;
+
+  const pivotIndex = partition(arr, start, end);
+  sortByAsc(arr, start, pivotIndex - 1);
+  sortByAsc(arr, pivotIndex + 1, end);
+
+  return arr;
 }
 
 /**
